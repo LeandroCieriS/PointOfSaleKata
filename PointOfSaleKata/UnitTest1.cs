@@ -17,13 +17,13 @@ namespace PointOfSaleKata
         [Test]
         public void Return_price_for_item_1()
         {
-            Assert.AreEqual("$7.25", pointOfSale.Scan("12345"));
+            Assert.AreEqual("$7,25", pointOfSale.Scan("12345"));
         }
 
         [Test]
         public void Return_price_for_item_2()
         {
-            Assert.AreEqual("$12.50", pointOfSale.Scan("23456"));
+            Assert.AreEqual("$12,50", pointOfSale.Scan("23456"));
         }
 
         [Test]
@@ -41,7 +41,7 @@ namespace PointOfSaleKata
         [Test]
         public void Return_sum_of_scanned_items()
         {
-            Assert.AreEqual("$19.75", pointOfSale.Scan("12345,23456,99999,"));
+            Assert.AreEqual("$19,75", pointOfSale.Scan("12345,23456"));
         }
     }
 
@@ -49,14 +49,27 @@ namespace PointOfSaleKata
     {
         public string Scan(string barcode)
         {
-            var itemsPrices = new Dictionary<string, string>
+            var itemsPrices = ItemsPrices();
+            var items = barcode.Split(',');
+            var totalPrice = 0.0;
+            foreach (var item in items)
             {
-                {"12345", "$7.25"},
-                {"23456", "$12.50"},
-                {"99999", "Error: barcode not found"},
-                {"", "Error: empty barcode"}
+                if (item == "") return "Error: empty barcode";
+                if (item == "99999") return "Error: barcode not found";
+                totalPrice += itemsPrices[item];
+            }
+
+            return $"${totalPrice.ToString("F" + 2)}";
+        }
+
+        private static Dictionary<string, double> ItemsPrices()
+        {
+            var itemsPrices = new Dictionary<string, double>
+            {
+                {"12345", 7.25},
+                {"23456", 12.50}
             };
-            return itemsPrices[barcode];
+            return itemsPrices;
         }
     }
 }
