@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace PointOfSaleKata
@@ -41,9 +43,14 @@ namespace PointOfSaleKata
     {
         public string Scan(string barcode)
         {
-            if (string.IsNullOrWhiteSpace(barcode)) return "Error: empty barcode";
-            if (barcode == "99999") return "Error: barcode not found";
-            return barcode == "23456" ? "$12.50" : "$7.25";
+            var itemsPrices = new Dictionary<string, string>
+            {
+                {"12345", "$7.25"},
+                {"23456", "$12.50"},
+                {"99999", "Error: barcode not found"},
+                {"", "Error: empty barcode"}
+            };
+            return itemsPrices[barcode];
         }
     }
 }
