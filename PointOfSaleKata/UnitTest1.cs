@@ -37,6 +37,12 @@ namespace PointOfSaleKata
         {
             Assert.AreEqual("Error: empty barcode", pointOfSale.Scan(""));
         }
+
+        [Test]
+        public void Return_sum_of_scanned_items()
+        {
+            Assert.AreEqual("$19.75", pointOfSale.Scan("12345,23456,99999,"));
+        }
     }
 
     public class PointOfSale
